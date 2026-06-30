@@ -5,39 +5,38 @@ import { getTheme, storeTheme } from '../utils/storage';
 // Define theme types
 export type ThemeType = 'light' | 'dark';
 
-// Define theme colors
 export const lightTheme = {
-  background: '#FFFFFF',
-  surface: '#F5F5F5',
-  primary: '#000000',
-  secondary: '#666666',
-  accent: '#333333',
-  border: '#E0E0E0',
-  text: '#000000',
-  textSecondary: '#666666',
-  tabBar: '#FFFFFF',
-  tabBarBorder: '#E0E0E0',
+  background: '#FAFCFB',
+  surface: '#FFFFFF',
+  primary: '#0A6B4B',
+  secondary: '#9DB8B0',
+  accent: '#C9A84C',
+  border: '#E0EDE8',
+  text: '#0D1F1A',
+  textSecondary: '#4B6B61',
+  tabBar: '#FAFCFB',
+  tabBarBorder: '#E0EDE8',
   card: '#FFFFFF',
-  cardBorder: '#E0E0E0',
-  icon: '#000000',
-  iconInactive: '#666666',
+  cardBorder: '#E0EDE8',
+  icon: '#0A6B4B',
+  iconInactive: '#9DB8B0',
 };
 
 export const darkTheme = {
-  background: '#000000',
-  surface: '#1A1A1A',
-  primary: '#FFFFFF',
-  secondary: '#999999',
-  accent: '#CCCCCC',
-  border: '#333333',
-  text: '#FFFFFF',
-  textSecondary: '#999999',
-  tabBar: '#000000',
-  tabBarBorder: '#333333',
-  card: '#1A1A1A',
-  cardBorder: '#333333',
-  icon: '#FFFFFF',
-  iconInactive: '#666666',
+  background: '#121212',
+  surface: '#1E1E1E',
+  primary: '#249C76', // Lighter green for dark mode contrast
+  secondary: '#5C7A70',
+  accent: '#D4B86A',
+  border: '#2C3632',
+  text: '#F5F5F5',
+  textSecondary: '#A0AAB2',
+  tabBar: '#1A1A1A',
+  tabBarBorder: '#2C3632',
+  card: '#1E1E1E',
+  cardBorder: '#2C3632',
+  icon: '#249C76',
+  iconInactive: '#5C7A70',
 };
 
 // Create theme context

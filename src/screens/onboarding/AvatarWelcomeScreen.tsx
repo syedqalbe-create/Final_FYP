@@ -170,7 +170,7 @@ const AvatarWelcomeScreen = ({ navigation }: any) => {
               style={styles.logo}
               resizeMode="contain"
             />
-            <Text style={[styles.kicker, { color: colors.textSecondary }]}>Shop360°</Text>
+            <Text style={[styles.kicker, { color: colors.textSecondary }]}>Vision AR</Text>
             <Text style={[styles.title, { color: colors.text }]}>Welcome, {name}.</Text>
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
               Let's personalize your profile with an avatar.

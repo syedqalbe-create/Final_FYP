@@ -1,4 +1,4 @@
-package com.fyp.shop360;
+package com.fyp.visionAR;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

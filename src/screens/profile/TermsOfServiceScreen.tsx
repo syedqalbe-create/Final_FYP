@@ -30,14 +30,14 @@ const TermsOfServiceScreen = () => {
         </Text>
 
         <Text style={[styles.intro, { color: colors.textSecondary }]}>
-          By using Shop360, you agree to these terms. If you don't agree, please don't use the app :)
+          By using Vision AR, you agree to these terms. If you don't agree, please don't use the app :)
         </Text>
 
         <View style={styles.section}>
           <Text style={[styles.sectionNumber, { color: colors.textSecondary }]}>01</Text>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>About Shop360</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>About Vision AR</Text>
           <Text style={[styles.sectionText, { color: colors.textSecondary }]}>
-            Shop360 is an AR-based shopping app developed as a Final Year Project. It lets users explore and visualize products in augmented reality before buying.
+            Vision AR is an AR-based shopping app developed as a Final Year Project. It lets users explore and visualize products in augmented reality before buying.
           </Text>
         </View>
 
@@ -108,7 +108,7 @@ const TermsOfServiceScreen = () => {
           <Text style={[styles.sectionNumber, { color: colors.textSecondary }]}>06</Text>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Intellectual Property</Text>
           <Text style={[styles.sectionText, { color: colors.textSecondary }]}>
-            All content, logos, designs, and code belong to the Shop360 team unless stated otherwise. Don't copy or reuse without permission.
+            All content, logos, designs, and code belong to the Vision AR team unless stated otherwise. Don't copy or reuse without permission.
           </Text>
         </View>
 
@@ -128,7 +128,7 @@ const TermsOfServiceScreen = () => {
           <Text style={[styles.sectionNumber, { color: colors.textSecondary }]}>08</Text>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Limitation of Liability</Text>
           <Text style={[styles.sectionText, { color: colors.textSecondary }]}>
-            Shop360 is provided "as is" for educational purposes. We're not liable for data loss, app downtime, or any indirect damages.
+            Vision AR is provided "as is" for educational purposes. We're not liable for data loss, app downtime, or any indirect damages.
           </Text>
         </View>
 

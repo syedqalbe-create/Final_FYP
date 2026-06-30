@@ -271,7 +271,7 @@ export const ARViewScreen = () => {
       setRequesting(true);
       const res = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.CAMERA, {
         title: 'Camera Permission',
-        message: 'Shop360 needs access to your camera to use AR.',
+        message: 'Vision AR needs access to your camera to use AR.',
         buttonPositive: 'Allow',
         buttonNegative: 'Deny',
       });
@@ -740,13 +740,14 @@ export const ARViewScreen = () => {
             onPress={toggleUIMinimize}
             activeOpacity={0.7}
           >
-            <Ionicons name={uiMinimized ? 'chevron-up' : 'chevron-down'} size={20} color="#fff" />
+            <Ionicons name={uiMinimized ? 'chevron-up' : 'chevron-down'} size={20} color="#0D1F1A" />
           </TouchableOpacity>
           <TouchableOpacity 
             style={styles.closeButton} 
             onPress={() => navigation.goBack()}
+            activeOpacity={0.7}
           >
-            <Ionicons name="close" size={18} color="#fff" />
+            <Ionicons name="close" size={20} color="#0D1F1A" />
           </TouchableOpacity>
         </View>
 
@@ -773,7 +774,7 @@ export const ARViewScreen = () => {
               {/* Status Info - Compact */}
               <View style={styles.statusBar}>
                 <View style={styles.statusItem}>
-                  <Ionicons name="radio" size={14} color="#fff" />
+                  <Ionicons name="radio" size={14} color="#0A6B4B" />
                   <Text style={styles.statusText}>
                     {trackingState === 'READY' ? 'Ready' : trackingState}
                   </Text>
@@ -789,29 +790,29 @@ export const ARViewScreen = () => {
               {/* Product Info */}
               {productName && (
                 <View style={styles.productInfoCard}>
-                  <Ionicons name="cube" size={20} color="#fff" />
+                  <Ionicons name="cube" size={20} color="#0A6B4B" />
                   <Text style={styles.productInfoText} numberOfLines={1}>
                     {productName}
                   </Text>
                 </View>
               )}
 
-              {/* Quick Instruction */}
               <Text style={styles.instructionText}>
                 {planeLocked ? 'Drag to adjust placement' : 'Move camera to scan, then tap Place'}
               </Text>
 
             {/* Main Controls Panel */}
             <View style={styles.controlsPanel}>
-              {/* Place Button - Prominent */}
-              <TouchableOpacity
-                style={styles.placeButton}
-                onPress={placeAtCenter}
-                activeOpacity={0.7}
-              >
-                <Ionicons name="locate" size={22} color="#fff" />
-                <Text style={styles.placeButtonText}>Place Model</Text>
-              </TouchableOpacity>
+              {/* Place Button - Circular Emerald Button */}
+              <View style={styles.placeButtonContainer}>
+                <TouchableOpacity
+                  style={styles.placeButton}
+                  onPress={placeAtCenter}
+                  activeOpacity={0.7}
+                >
+                  <Ionicons name="locate" size={24} color="#fff" />
+                </TouchableOpacity>
+              </View>
 
               {/* Movement Controls */}
               <View style={styles.controlSection}>
@@ -824,31 +825,31 @@ export const ARViewScreen = () => {
                       {...createHoldToRepeatHandlers('move-y-up', () => moveModel('y', 1))}
                       activeOpacity={0.75}
                     >
-                      <Ionicons name="chevron-up" size={22} color="#fff" />
+                      <Ionicons name="chevron-up" size={22} color="#0A6B4B" />
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={[styles.dpadBtn, styles.dpadLeft]}
                       {...createHoldToRepeatHandlers('move-x-left', () => moveModel('x', -1))}
                       activeOpacity={0.75}
                     >
-                      <Ionicons name="chevron-back" size={22} color="#fff" />
+                      <Ionicons name="chevron-back" size={22} color="#0A6B4B" />
                     </TouchableOpacity>
                     <View style={styles.dpadCenter}>
-                      <Ionicons name="move" size={18} color="rgba(255,255,255,0.8)" />
+                      <Ionicons name="move" size={18} color="#0A6B4B" />
                     </View>
                     <TouchableOpacity
                       style={[styles.dpadBtn, styles.dpadRight]}
                       {...createHoldToRepeatHandlers('move-x-right', () => moveModel('x', 1))}
                       activeOpacity={0.75}
                     >
-                      <Ionicons name="chevron-forward" size={22} color="#fff" />
+                      <Ionicons name="chevron-forward" size={22} color="#0A6B4B" />
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={[styles.dpadBtn, styles.dpadDown]}
                       {...createHoldToRepeatHandlers('move-y-down', () => moveModel('y', -1))}
                       activeOpacity={0.75}
                     >
-                      <Ionicons name="chevron-down" size={22} color="#fff" />
+                      <Ionicons name="chevron-down" size={22} color="#0A6B4B" />
                     </TouchableOpacity>
                   </View>
 
@@ -860,7 +861,7 @@ export const ARViewScreen = () => {
                       {...createHoldToRepeatHandlers('move-z-near', () => moveModel('z', 1))}
                       activeOpacity={0.75}
                     >
-                      <Ionicons name="arrow-up" size={18} color="#fff" />
+                      <Ionicons name="arrow-up" size={18} color="#0A6B4B" />
                       <Text style={styles.pillBtnText}>Near</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -868,7 +869,7 @@ export const ARViewScreen = () => {
                       {...createHoldToRepeatHandlers('move-z-far', () => moveModel('z', -1))}
                       activeOpacity={0.75}
                     >
-                      <Ionicons name="arrow-down" size={18} color="#fff" />
+                      <Ionicons name="arrow-down" size={18} color="#0A6B4B" />
                       <Text style={styles.pillBtnText}>Far</Text>
                     </TouchableOpacity>
                   </View>
@@ -887,7 +888,7 @@ export const ARViewScreen = () => {
                     {...createHoldToRepeatHandlers('rotate-left', () => rotateModel(-1))}
                     activeOpacity={0.75}
                   >
-                    <Ionicons name="return-up-back" size={20} color="#fff" />
+                    <Ionicons name="return-up-back" size={20} color="#0A6B4B" />
                     <Text style={styles.iconBtnText}>Left</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -895,7 +896,7 @@ export const ARViewScreen = () => {
                     onPress={resetRotation}
                     activeOpacity={0.75}
                   >
-                    <Ionicons name="refresh" size={20} color="#fff" />
+                    <Ionicons name="refresh" size={20} color="#0A6B4B" />
                     <Text style={styles.iconBtnText}>Reset</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -903,7 +904,7 @@ export const ARViewScreen = () => {
                     {...createHoldToRepeatHandlers('rotate-right', () => rotateModel(1))}
                     activeOpacity={0.75}
                   >
-                    <Ionicons name="return-up-forward" size={20} color="#fff" />
+                    <Ionicons name="return-up-forward" size={20} color="#0A6B4B" />
                     <Text style={styles.iconBtnText}>Right</Text>
                   </TouchableOpacity>
                 </View>
@@ -921,7 +922,7 @@ export const ARViewScreen = () => {
                     {...createHoldToRepeatHandlers('zoom-in', () => zoom(1))}
                     activeOpacity={0.75}
                   >
-                    <Ionicons name="add" size={20} color="#fff" />
+                    <Ionicons name="add" size={20} color="#0A6B4B" />
                     <Text style={styles.iconBtnText}>In</Text>
                   </TouchableOpacity>
                   <TouchableOpacity 
@@ -929,7 +930,7 @@ export const ARViewScreen = () => {
                     onPress={resetZoom} 
                     activeOpacity={0.75}
                   >
-                    <Ionicons name="refresh" size={20} color="#fff" />
+                    <Ionicons name="refresh" size={20} color="#0A6B4B" />
                     <Text style={styles.iconBtnText}>Reset</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
@@ -937,7 +938,7 @@ export const ARViewScreen = () => {
                     {...createHoldToRepeatHandlers('zoom-out', () => zoom(-1))}
                     activeOpacity={0.75}
                   >
-                    <Ionicons name="remove" size={20} color="#fff" />
+                    <Ionicons name="remove" size={20} color="#0A6B4B" />
                     <Text style={styles.iconBtnText}>Out</Text>
                   </TouchableOpacity>
                 </View>
@@ -950,7 +951,7 @@ export const ARViewScreen = () => {
                   onPress={resetPosition}
                   activeOpacity={0.75}
                 >
-                  <Ionicons name="navigate" size={18} color="#fff" />
+                  <Ionicons name="navigate" size={18} color="#0A6B4B" />
                   <Text style={styles.secondaryBtnText}>Reset Pos</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -958,7 +959,7 @@ export const ARViewScreen = () => {
                   onPress={resetPlane}
                   activeOpacity={0.75}
                 >
-                  <Ionicons name="scan" size={18} color="#fff" />
+                  <Ionicons name="scan" size={18} color="#0A6B4B" />
                   <Text style={styles.secondaryBtnText}>Reset Plane</Text>
                 </TouchableOpacity>
               </View>
@@ -1008,24 +1009,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   minimizeButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(26,26,26,0.9)',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'rgba(51,51,51,0.8)',
+    borderWidth: 1,
+    borderColor: '#E0EDE8',
   },
   closeButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(26,26,26,0.9)',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'rgba(51,51,51,0.8)',
+    borderWidth: 1,
+    borderColor: '#E0EDE8',
   },
   controlsContainer: {
     position: 'absolute',
@@ -1037,11 +1038,11 @@ const styles = StyleSheet.create({
   },
   glassPanel: {
     flex: 1,
-    backgroundColor: 'rgba(26,26,26,0.9)',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    borderTopWidth: 1.5,
-    borderColor: 'rgba(51,51,51,0.8)',
+    backgroundColor: 'rgba(255,255,255,0.92)',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    borderTopWidth: 1,
+    borderColor: '#E0EDE8',
     overflow: 'hidden',
   },
   controlsScroll: {
@@ -1066,21 +1067,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 12,
-    backgroundColor: 'rgba(26,26,26,0.85)',
+    backgroundColor: '#F4F9F7',
     borderWidth: 1,
-    borderColor: 'rgba(51,51,51,0.7)',
+    borderColor: '#E0EDE8',
   },
   statusError: {
-    backgroundColor: 'rgba(255,59,48,0.8)',
-    borderColor: 'rgba(255,100,100,0.9)',
+    backgroundColor: 'rgba(255,59,48,0.1)',
+    borderColor: 'rgba(255,59,48,0.3)',
   },
   statusText: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#fff',
+    color: '#0D1F1A',
   },
   statusErrorText: {
-    color: '#fff',
+    color: '#FF3B30',
     fontSize: 11,
     fontWeight: '700',
   },
@@ -1089,7 +1090,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     textAlign: 'center',
     fontWeight: '700',
-    color: '#fff',
+    color: '#0D1F1A',
   },
   debugHint: {
     fontSize: 11,
@@ -1097,15 +1098,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingHorizontal: 16,
     fontStyle: 'italic',
-    color: 'rgba(255,255,255,0.9)',
+    color: '#4B6B61',
   },
   productInfoCard: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
-    backgroundColor: 'rgba(26,26,26,0.9)',
-    borderWidth: 1.5,
-    borderColor: 'rgba(51,51,51,0.8)',
+    backgroundColor: '#F4F9F7',
+    borderWidth: 1,
+    borderColor: '#E0EDE8',
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 12,
@@ -1115,14 +1116,14 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
     fontWeight: '700',
-    color: '#fff',
+    color: '#0D1F1A',
   },
   controlsPanel: {
     borderRadius: 16,
     padding: 18,
-    backgroundColor: 'rgba(26,26,26,0.85)',
-    borderWidth: 1.5,
-    borderColor: 'rgba(51,51,51,0.7)',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E0EDE8',
     gap: 16,
   },
   controlSection: {
@@ -1135,7 +1136,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     letterSpacing: 0.5,
     textTransform: 'uppercase',
-    color: '#fff',
+    color: '#4B6B61',
   },
   controlRow: {
     flexDirection: 'row',
@@ -1148,18 +1149,18 @@ const styles = StyleSheet.create({
     height: 140,
     position: 'relative',
     borderRadius: 16,
-    backgroundColor: 'rgba(26,26,26,0.9)',
-    borderWidth: 2,
-    borderColor: 'rgba(51,51,51,0.8)',
+    backgroundColor: '#F4F9F7',
+    borderWidth: 1,
+    borderColor: '#E0EDE8',
   },
   dpadBtn: {
     position: 'absolute',
     width: 40,
     height: 40,
     borderRadius: 10,
-    backgroundColor: 'rgba(153,153,153,0.5)',
-    borderWidth: 2,
-    borderColor: 'rgba(204,204,204,0.7)',
+    backgroundColor: 'rgba(10,107,75,0.1)',
+    borderWidth: 1,
+    borderColor: '#E0EDE8',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1174,9 +1175,9 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 10,
-    backgroundColor: 'rgba(26,26,26,0.95)',
-    borderWidth: 2,
-    borderColor: 'rgba(51,51,51,0.7)',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E0EDE8',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1190,7 +1191,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     letterSpacing: 0.3,
     marginBottom: 8,
-    color: '#fff',
+    color: '#4B6B61',
   },
   pillBtn: {
     flexDirection: 'row',
@@ -1200,14 +1201,14 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 14,
     borderRadius: 12,
-    backgroundColor: 'rgba(153,153,153,0.45)',
-    borderWidth: 2,
-    borderColor: 'rgba(204,204,204,0.65)',
+    backgroundColor: '#F4F9F7',
+    borderWidth: 1,
+    borderColor: '#E0EDE8',
   },
   pillBtnText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#fff',
+    color: '#0D1F1A',
   },
   rotateHeader: {
     flexDirection: 'row',
@@ -1218,7 +1219,7 @@ const styles = StyleSheet.create({
   rotateValue: {
     fontSize: 15,
     fontWeight: '800',
-    color: '#fff',
+    color: '#0D1F1A',
   },
   rotateBtns: {
     flexDirection: 'row',
@@ -1233,14 +1234,14 @@ const styles = StyleSheet.create({
     paddingVertical: 14,
     paddingHorizontal: 10,
     borderRadius: 14,
-    backgroundColor: 'rgba(153,153,153,0.45)',
-    borderWidth: 2,
-    borderColor: 'rgba(204,204,204,0.65)',
+    backgroundColor: '#F4F9F7',
+    borderWidth: 1,
+    borderColor: '#E0EDE8',
   },
   iconBtnText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#fff',
+    color: '#0D1F1A',
   },
   footerActions: {
     marginTop: 8,
@@ -1255,27 +1256,33 @@ const styles = StyleSheet.create({
     gap: 6,
     paddingVertical: 14,
     borderRadius: 14,
-    backgroundColor: 'rgba(26,26,26,0.9)',
-    borderWidth: 2,
-    borderColor: 'rgba(51,51,51,0.8)',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E0EDE8',
   },
   secondaryBtnText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#fff',
+    color: '#0D1F1A',
   },
-  placeButton: {
-    flexDirection: 'row',
+  placeButtonContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    borderRadius: 16,
-    paddingVertical: 18,
-    paddingHorizontal: 24,
-    marginBottom: 12,
-    gap: 10,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    borderWidth: 2.5,
-    borderColor: 'rgba(204,204,204,0.75)',
+    width: '100%',
+    marginVertical: 4,
+  },
+  placeButton: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#0A6B4B',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#0A6B4B',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 4,
   },
   placeButtonText: {
     fontSize: 17,

@@ -8,14 +8,15 @@ import {
   StatusBar,
   Image,
   ActivityIndicator,
+  Animated,
+  Platform,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+// LinearGradient replaced with pure RN View overlay (expo-linear-gradient requires Expo)
 
 import { ThemedText } from '../../components/ThemedText';
-import { IconSymbol } from '../../components/ui/IconSymbol';
 import { useTheme } from '../../contexts/ThemeContext';
 import { useAuth } from '../../contexts/AuthContext';
 import { useAppAlert } from '../../contexts/AppAlertContext';
@@ -32,114 +33,133 @@ import {
 } from '../../services/notificationService';
 import { getAvatarSourceForUser } from '../../utils/avatarUtils';
 
-// Define types for props
+// Helper to get premium product images
+const getProductImageUri = (product: StoreProduct) => {
+  const title = product.title.toLowerCase();
+  if (title.includes('headphone')) {
+    return 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400';
+  }
+  if (title.includes('watch') || title.includes('smartwatch')) {
+    return 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400';
+  }
+  if (title.includes('laptop') || title.includes('computer')) {
+    return 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400';
+  }
+  if (title.includes('sneaker') || title.includes('shoe')) {
+    return 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400';
+  }
+  return product.thumbnail || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400';
+};
+
 interface FeatureSectionProps {
   title: string;
   description: string;
-  iconType: 'sf' | 'ionicon';
-  sfIconName?:
-    | 'house.fill'
-    | 'paperplane.fill'
-    | 'chevron.left.forwardslash.chevron.right'
-    | 'chevron.right';
-  ionIconName?: string;
+  ionIconName: string;
 }
 
-interface FeaturedProductProps {
-  title: string;
-  image: string;
-  price: string;
-}
-
-// Minimal feature section component
-const FeatureSection = ({
-  title,
-  description,
-  iconType,
-  sfIconName,
-  ionIconName,
-}: FeatureSectionProps) => {
+const FeatureSection = ({ title, description, ionIconName }: FeatureSectionProps) => {
   const { colors } = useTheme();
+  const styles = getStyles(colors);
   return (
     <View style={styles.featureCard}>
-      {iconType === 'ionicon' ? (
-        <Ionicons
-          name={ionIconName as any}
-          size={28}
-          color={colors.primary}
-          style={styles.featureIcon}
-        />
-      ) : (
-        <IconSymbol
-          size={28}
-          name={sfIconName!}
-          color={colors.primary}
-          style={styles.featureIcon}
-        />
-      )}
-      <ThemedText style={[styles.featureTitle, { color: colors.text }]}>
+      <View style={styles.featureIconContainer}>
+        <Ionicons name={ionIconName as any} size={22} color={colors.primary} />
+      </View>
+      <ThemedText style={styles.featureTitle} numberOfLines={2}>
         {title}
       </ThemedText>
-      <ThemedText style={[styles.featureDescription, { color: colors.textSecondary }]}>
+      <ThemedText style={styles.featureDescription}>
         {description}
       </ThemedText>
     </View>
   );
 };
 
-// Featured product component
-const FeaturedProduct = ({
-  product,
-}: {
-  product: StoreProduct;
-}) => {
+// Premium Product Card with Scale Spring and Pulse AR Badge
+const ProductCard = ({ product }: { product: StoreProduct }) => {
   const { colors } = useTheme();
+  const styles = getStyles(colors);
   const navigation = useNavigation<any>();
+  const scale = useRef(new Animated.Value(1)).current;
+  const badgeScale = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(badgeScale, {
+          toValue: 1.08,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(badgeScale, {
+          toValue: 1.0,
+          duration: 1000,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, []);
+
+  const handlePressIn = () => {
+    Animated.spring(scale, {
+      toValue: 0.97,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(scale, {
+      toValue: 1,
+      useNativeDriver: true,
+    }).start();
+  };
+
   const discountedPrice =
     product.discountPercentage > 0
       ? product.price * (1 - product.discountPercentage / 100)
       : product.price;
 
   return (
-    <TouchableOpacity
-      style={[styles.featuredProductCard, { backgroundColor: colors.surface }]}
-      onPress={() => navigation.navigate('ProductDetails', { id: product.id })}
-      activeOpacity={0.9}
-    >
-      <Image
-        source={{ uri: product.thumbnail || '' }}
-        style={styles.featuredProductImage}
-      />
-      <View style={styles.featuredProductInfo}>
-        <ThemedText
-          type="defaultSemiBold"
-          style={[styles.featuredProductTitle, { color: colors.text }]}
-          numberOfLines={2}
-        >
-          {product.title}
-        </ThemedText>
-        <View style={styles.featuredProductPriceRow}>
-          <ThemedText style={[styles.featuredProductPrice, { color: colors.primary }]}>
-            ${discountedPrice.toFixed(2)}
-          </ThemedText>
-          {product.discountPercentage > 0 && (
-            <ThemedText
-              style={[
-                styles.featuredProductOriginalPrice,
-                { color: colors.textSecondary },
-              ]}
-            >
-              ${product.price.toFixed(2)}
-            </ThemedText>
-          )}
+    <Animated.View style={{ transform: [{ scale }] }}>
+      <TouchableOpacity
+        style={styles.productCard}
+        onPress={() => navigation.navigate('ProductDetails', { id: product.id })}
+        onPressIn={handlePressIn}
+        onPressOut={handlePressOut}
+        activeOpacity={1}
+      >
+        <View style={styles.productImageContainer}>
+          <Image
+            source={{ uri: getProductImageUri(product) }}
+            style={styles.productImage}
+          />
+          <Animated.View style={[styles.arBadge, { transform: [{ scale: badgeScale }] }]}>
+            <ThemedText style={styles.arBadgeText}>AR</ThemedText>
+          </Animated.View>
         </View>
-      </View>
-    </TouchableOpacity>
+        <View style={styles.productInfo}>
+          <ThemedText style={styles.productTitle} numberOfLines={2}>
+            {product.title}
+          </ThemedText>
+          <View style={styles.priceRow}>
+            <ThemedText style={styles.productPrice}>
+              ${discountedPrice.toFixed(2)}
+            </ThemedText>
+            {product.discountPercentage > 0 && (
+              <ThemedText style={styles.originalPrice}>
+                ${product.price.toFixed(2)}
+              </ThemedText>
+            )}
+          </View>
+        </View>
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
 
 export default function HomeScreen() {
   const { colors, isDark } = useTheme();
+  const styles = getStyles(colors);
   const insets = useSafeAreaInsets();
   const navigation = useNavigation<any>();
   const { user, profile, isAdmin } = useAuth();
@@ -154,12 +174,42 @@ export default function HomeScreen() {
   const knownNotificationIdsRef = useRef<Set<string>>(new Set());
   const notificationsInitializedRef = useRef(false);
 
-  // Get avatar source for the user
+  // Animations for mount fade-in
+  const heroOpacity = useRef(new Animated.Value(0)).current;
+  const heroTranslateY = useRef(new Animated.Value(16)).current;
+
+  const featuresOpacity = useRef(new Animated.Value(0)).current;
+  const featuresTranslateY = useRef(new Animated.Value(16)).current;
+
+  const productsOpacity = useRef(new Animated.Value(0)).current;
+  const productsTranslateY = useRef(new Animated.Value(16)).current;
+
+  // "Explore Now" button bg flash animation
+  const exploreBtnBg = useRef(new Animated.Value(0)).current;
+
   const avatarSource = getAvatarSourceForUser({
     avatarId: profile?.avatarId,
     isGuest: !user,
     isAdmin: isAdmin,
   });
+
+  useEffect(() => {
+    // Staggered sections fade-in
+    Animated.stagger(150, [
+      Animated.parallel([
+        Animated.timing(heroOpacity, { toValue: 1, duration: 400, useNativeDriver: true }),
+        Animated.timing(heroTranslateY, { toValue: 0, duration: 400, useNativeDriver: true }),
+      ]),
+      Animated.parallel([
+        Animated.timing(featuresOpacity, { toValue: 1, duration: 400, useNativeDriver: true }),
+        Animated.timing(featuresTranslateY, { toValue: 0, duration: 400, useNativeDriver: true }),
+      ]),
+      Animated.parallel([
+        Animated.timing(productsOpacity, { toValue: 1, duration: 400, useNativeDriver: true }),
+        Animated.timing(productsTranslateY, { toValue: 0, duration: 400, useNativeDriver: true }),
+      ]),
+    ]).start();
+  }, []);
 
   useEffect(() => {
     const unsub = subscribeFeaturedProducts(
@@ -240,7 +290,6 @@ export default function HomeScreen() {
         );
 
         if (incoming) {
-          // Don't show alert for "Order Placed" – user already sees the Order Placed screen
           if (incoming.title !== 'Order Placed') {
             alert(incoming.title || 'New notification', incoming.message || 'You have a new update.', [
               { text: 'Later', style: 'cancel' },
@@ -254,47 +303,53 @@ export default function HomeScreen() {
 
         knownNotificationIdsRef.current = currentIds;
       },
-      () => {},
+      () => { },
     );
 
     return unsub;
   }, [user?.uid, user?.emailVerified, alert, navigation]);
 
+  const handleExplorePress = () => {
+    Animated.sequence([
+      Animated.timing(exploreBtnBg, { toValue: 1, duration: 200, useNativeDriver: false }),
+      Animated.timing(exploreBtnBg, { toValue: 0, duration: 200, useNativeDriver: false }),
+    ]).start(() => {
+      navigation.navigate('Products');
+    });
+  };
+
+  const exploreBtnBgColor = exploreBtnBg.interpolate({
+    inputRange: [0, 1],
+    outputRange: [colors.primary, colors.accent],
+  });
+
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <View style={styles.container}>
       <StatusBar
         barStyle={isDark ? 'light-content' : 'dark-content'}
         backgroundColor={colors.background}
         translucent={false}
       />
       <ScrollView
-        style={[styles.scrollView, { backgroundColor: colors.background }]}
+        style={styles.scrollView}
         contentContainerStyle={[styles.scrollContent, { paddingTop: insets.top }]}
         showsVerticalScrollIndicator={false}
       >
+        {/* Screen Header */}
         <View style={styles.header}>
           <View style={styles.headerContent}>
             <View style={styles.greetingContainer}>
-              <ThemedText style={[styles.greeting, { color: colors.textSecondary }]}>
-                {user && profile?.name
-                  ? `Hi, ${profile.name.split(' ')[0]}`
-                  : user
-                  ? 'Welcome back'
-                  : 'Welcome'}
+              <ThemedText style={styles.welcomeText}>
+                Welcome to
               </ThemedText>
-              <ThemedText type="title" style={[styles.appName, { color: colors.text }]}>
-                Shop360°
+              <ThemedText style={styles.apexTitle}>
+                Vision AR
               </ThemedText>
+              <View style={styles.goldBar} />
             </View>
             <View style={styles.profileButtonWrapper}>
               <TouchableOpacity
-                style={[
-                  styles.profileButton,
-                  {
-                    backgroundColor: colors.surface,
-                    borderColor: colors.border,
-                  },
-                ]}
+                style={styles.profileButton}
                 onPress={() => {
                   if (unreadNotificationCount > 0) {
                     navigation.navigate('Notifications');
@@ -318,196 +373,199 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* Banner */}
-        <View style={[styles.bannerContainer, { borderColor: colors.border }]}>
+        {/* Hero Banner with Fade-in animation */}
+        <Animated.View
+          style={[
+            styles.bannerContainer,
+            { opacity: heroOpacity, transform: [{ translateY: heroTranslateY }] },
+          ]}
+        >
           <Image
             source={{
-              uri: 'https://images.ctfassets.net/wp1lcwdav1p1/2bzxvC8K1Cv0OMSQEA7p9l/eaa3de48c71d61a4a7d9c064d7235db6/GettyImages-1351925376.jpg?w=1500&h=680&q=60&fit=fill&f=faces&fm=jpg&fl=progressive',
+              uri: 'https://images.unsplash.com/photo-1586105251261-72a756497a11?w=800',
             }}
             style={styles.bannerImage}
           />
-          <View style={[styles.bannerOverlay, { backgroundColor: 'rgba(0,0,0,0.6)' }]}>
-            <ThemedText type="title" style={styles.bannerTitle}>
+          <View
+            style={styles.bannerOverlay}
+          >
+            <ThemedText style={styles.bannerTitle}>
               View in AR
             </ThemedText>
             <ThemedText style={styles.bannerSubtitle}>Experience products in your space</ThemedText>
-            <TouchableOpacity
-              style={[
-                styles.bannerButton,
-                {
-                  backgroundColor: isDark ? colors.primary : '#FFFFFF',
-                  borderColor: colors.border,
-                },
-              ]}
-              onPress={() => navigation.navigate('Products')}
-            >
-              <ThemedText
-                style={[
-                  styles.bannerButtonText,
-                  {
-                    color: isDark ? colors.background : colors.primary,
-                  },
-                ]}
+            <Animated.View style={{ backgroundColor: exploreBtnBgColor, borderRadius: 50 }}>
+              <TouchableOpacity
+                style={styles.bannerButton}
+                onPress={handleExplorePress}
+                activeOpacity={1}
               >
-                Explore Now
+                <ThemedText style={styles.bannerButtonText}>
+                  Explore Now
+                </ThemedText>
+              </TouchableOpacity>
+            </Animated.View>
+          </View>
+        </Animated.View>
+
+        {/* Features section with Fade-in animation */}
+        <Animated.View
+          style={{ opacity: featuresOpacity, transform: [{ translateY: featuresTranslateY }] }}
+        >
+          <View style={styles.sectionHeader}>
+            <ThemedText style={styles.sectionTitle}>
+              Why Shop With Us
+            </ThemedText>
+          </View>
+
+          <View style={styles.featuresContainer}>
+            <FeatureSection
+              title="AR Experience"
+              description="Try products in your space"
+              ionIconName="cube-outline"
+            />
+            <FeatureSection
+              title="Precise Details"
+              description="Exact dimensions and specs"
+              ionIconName="scan-outline"
+            />
+            <FeatureSection
+              title="Smart Shopping"
+              description="Intelligent recommendations"
+              ionIconName="sparkles-outline"
+            />
+          </View>
+        </Animated.View>
+
+        {/* Products lists with Fade-in animation */}
+        <Animated.View
+          style={{ opacity: productsOpacity, transform: [{ translateY: productsTranslateY }] }}
+        >
+          {/* Featured products */}
+          <View style={styles.sectionHeader}>
+            <ThemedText style={styles.sectionTitle}>
+              Featured Products
+            </ThemedText>
+            <TouchableOpacity onPress={() => navigation.navigate('Products')} activeOpacity={0.7}>
+              <ThemedText style={styles.viewAllText}>
+                View All
               </ThemedText>
             </TouchableOpacity>
           </View>
-        </View>
 
-        {/* Features section */}
-        <View style={styles.sectionHeader}>
-          <ThemedText style={[styles.sectionTitle, { color: colors.text }]}>
-            Why Shop With Us
-          </ThemedText>
-        </View>
+          {loadingFeatured ? (
+            <View style={styles.featuredLoadingContainer}>
+              <ActivityIndicator size="small" color={colors.primary} />
+              <ThemedText style={styles.featuredLoadingText}>
+                Loading featured products...
+              </ThemedText>
+            </View>
+          ) : featuredProducts.length === 0 ? (
+            <View style={styles.featuredEmptyContainer}>
+              <Ionicons name="cube-outline" size={48} color={colors.secondary} />
+              <ThemedText style={styles.featuredEmptyText}>
+                No featured products yet
+              </ThemedText>
+              <ThemedText style={styles.featuredEmptySubtext}>
+                Mark products as featured in admin to see them here
+              </ThemedText>
+            </View>
+          ) : (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.featuredProductsContainer}
+              contentContainerStyle={styles.featuredProductsContent}
+            >
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </ScrollView>
+          )}
 
-        <View style={styles.featuresContainer}>
-          <FeatureSection
-            title="AR Experience"
-            description="Try products in your space"
-            iconType="ionicon"
-            ionIconName="cube-outline"
-          />
-          <FeatureSection
-            title="Precise Details"
-            description="Exact dimensions and specs"
-            iconType="ionicon"
-            ionIconName="scan-outline"
-          />
-          <FeatureSection
-            title="Smart Shopping"
-            description="Intelligent recommendations"
-            iconType="ionicon"
-            ionIconName="sparkles-outline"
-          />
-        </View>
-
-        {/* Featured products */}
-        <View style={styles.sectionHeader}>
-          <ThemedText style={[styles.sectionTitle, { color: colors.text }]}>
-            Featured Products
-          </ThemedText>
-          <TouchableOpacity onPress={() => navigation.navigate('Products')} activeOpacity={0.7}>
-            <ThemedText style={[styles.viewAllText, { color: colors.primary }]}>
-              View All
+          {/* New Arrivals */}
+          <View style={styles.sectionHeader}>
+            <ThemedText style={styles.sectionTitle}>
+              New Arrivals
             </ThemedText>
-          </TouchableOpacity>
-        </View>
-
-        {loadingFeatured ? (
-          <View style={styles.featuredLoadingContainer}>
-            <ActivityIndicator size="small" color={colors.primary} />
-            <ThemedText style={[styles.featuredLoadingText, { color: colors.textSecondary }]}>
-              Loading featured products...
-            </ThemedText>
+            <TouchableOpacity onPress={() => navigation.navigate('Products')} activeOpacity={0.7}>
+              <ThemedText style={styles.viewAllText}>
+                View All
+              </ThemedText>
+            </TouchableOpacity>
           </View>
-        ) : featuredProducts.length === 0 ? (
-          <View style={styles.featuredEmptyContainer}>
-            <Ionicons name="cube-outline" size={48} color={colors.textSecondary} />
-            <ThemedText style={[styles.featuredEmptyText, { color: colors.textSecondary }]}>
-              No featured products yet
-            </ThemedText>
-            <ThemedText style={[styles.featuredEmptySubtext, { color: colors.textSecondary }]}>
-              Mark products as featured in admin to see them here
-            </ThemedText>
-          </View>
-        ) : (
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.featuredProductsContainer}
-            contentContainerStyle={styles.featuredProductsContent}
-          >
-            {featuredProducts.map((product) => (
-              <FeaturedProduct key={product.id} product={product} />
-            ))}
-          </ScrollView>
-        )}
 
-        {/* New Arrivals */}
-        <View style={styles.sectionHeader}>
-          <ThemedText style={[styles.sectionTitle, { color: colors.text }]}>
-            New Arrivals
-          </ThemedText>
-          <TouchableOpacity onPress={() => navigation.navigate('Products')} activeOpacity={0.7}>
-            <ThemedText style={[styles.viewAllText, { color: colors.primary }]}>
-              View All
-            </ThemedText>
-          </TouchableOpacity>
-        </View>
+          {loadingNewArrivals ? (
+            <View style={styles.featuredLoadingContainer}>
+              <ActivityIndicator size="small" color={colors.primary} />
+              <ThemedText style={styles.featuredLoadingText}>
+                Loading new arrivals...
+              </ThemedText>
+            </View>
+          ) : newArrivals.length === 0 ? (
+            <View style={styles.featuredEmptyContainer}>
+              <Ionicons name="sparkles-outline" size={48} color={colors.secondary} />
+              <ThemedText style={styles.featuredEmptyText}>
+                No new arrivals yet
+              </ThemedText>
+              <ThemedText style={styles.featuredEmptySubtext}>
+                Mark products as new arrivals in admin to see them here
+              </ThemedText>
+            </View>
+          ) : (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.featuredProductsContainer}
+              contentContainerStyle={styles.featuredProductsContent}
+            >
+              {newArrivals.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </ScrollView>
+          )}
 
-        {loadingNewArrivals ? (
-          <View style={styles.featuredLoadingContainer}>
-            <ActivityIndicator size="small" color={colors.primary} />
-            <ThemedText style={[styles.featuredLoadingText, { color: colors.textSecondary }]}>
-              Loading new arrivals...
+          {/* Best Sellers */}
+          <View style={styles.sectionHeader}>
+            <ThemedText style={styles.sectionTitle}>
+              Best Sellers
             </ThemedText>
+            <TouchableOpacity onPress={() => navigation.navigate('Products')} activeOpacity={0.7}>
+              <ThemedText style={styles.viewAllText}>
+                View All
+              </ThemedText>
+            </TouchableOpacity>
           </View>
-        ) : newArrivals.length === 0 ? (
-          <View style={styles.featuredEmptyContainer}>
-            <Ionicons name="sparkles-outline" size={48} color={colors.textSecondary} />
-            <ThemedText style={[styles.featuredEmptyText, { color: colors.textSecondary }]}>
-              No new arrivals yet
-            </ThemedText>
-            <ThemedText style={[styles.featuredEmptySubtext, { color: colors.textSecondary }]}>
-              Mark products as new arrivals in admin to see them here
-            </ThemedText>
-          </View>
-        ) : (
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.featuredProductsContainer}
-            contentContainerStyle={styles.featuredProductsContent}
-          >
-            {newArrivals.map((product) => (
-              <FeaturedProduct key={product.id} product={product} />
-            ))}
-          </ScrollView>
-        )}
 
-        {/* Best Sellers */}
-        <View style={styles.sectionHeader}>
-          <ThemedText style={[styles.sectionTitle, { color: colors.text }]}>
-            Best Sellers
-          </ThemedText>
-          <TouchableOpacity onPress={() => navigation.navigate('Products')} activeOpacity={0.7}>
-            <ThemedText style={[styles.viewAllText, { color: colors.primary }]}>
-              View All
-            </ThemedText>
-          </TouchableOpacity>
-        </View>
-
-        {loadingBestSellers ? (
-          <View style={styles.featuredLoadingContainer}>
-            <ActivityIndicator size="small" color={colors.primary} />
-            <ThemedText style={[styles.featuredLoadingText, { color: colors.textSecondary }]}>
-              Loading best sellers...
-            </ThemedText>
-          </View>
-        ) : bestSellers.length === 0 ? (
-          <View style={styles.featuredEmptyContainer}>
-            <Ionicons name="trophy-outline" size={48} color={colors.textSecondary} />
-            <ThemedText style={[styles.featuredEmptyText, { color: colors.textSecondary }]}>
-              No best sellers yet
-            </ThemedText>
-            <ThemedText style={[styles.featuredEmptySubtext, { color: colors.textSecondary }]}>
-              Mark products as best sellers in admin to see them here
-            </ThemedText>
-          </View>
-        ) : (
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={styles.featuredProductsContainer}
-            contentContainerStyle={styles.featuredProductsContent}
-          >
-            {bestSellers.map((product) => (
-              <FeaturedProduct key={product.id} product={product} />
-            ))}
-          </ScrollView>
-        )}
+          {loadingBestSellers ? (
+            <View style={styles.featuredLoadingContainer}>
+              <ActivityIndicator size="small" color={colors.primary} />
+              <ThemedText style={styles.featuredLoadingText}>
+                Loading best sellers...
+              </ThemedText>
+            </View>
+          ) : bestSellers.length === 0 ? (
+            <View style={styles.featuredEmptyContainer}>
+              <Ionicons name="trophy-outline" size={48} color={colors.secondary} />
+              <ThemedText style={styles.featuredEmptyText}>
+                No best sellers yet
+              </ThemedText>
+              <ThemedText style={styles.featuredEmptySubtext}>
+                Mark products as best sellers in admin to see them here
+              </ThemedText>
+            </View>
+          ) : (
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={styles.featuredProductsContainer}
+              contentContainerStyle={styles.featuredProductsContent}
+            >
+              {bestSellers.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </ScrollView>
+          )}
+        </Animated.View>
       </ScrollView>
     </View>
   );
@@ -515,50 +573,59 @@ export default function HomeScreen() {
 
 const { width } = Dimensions.get('window');
 
-const styles = StyleSheet.create({
+const getStyles = (colors: any) => StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.background,
   },
   scrollView: {
     flex: 1,
   },
   scrollContent: {
     flexGrow: 1,
-    paddingBottom: 100, // Account for tab bar
+    paddingBottom: 100,
   },
   header: {
     paddingHorizontal: 20,
     paddingTop: 12,
-    paddingBottom: 24,
-    overflow: 'visible',
+    paddingBottom: 32,
   },
   headerContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    overflow: 'visible',
   },
   greetingContainer: {
     flex: 1,
     paddingRight: 12,
   },
-  greeting: {
-    fontSize: 18,
-    fontWeight: '500',
-    marginBottom: 2,
-    opacity: 0.8,
+  welcomeText: {
+    fontSize: 13,
+    color: colors.textSecondary,
+    fontWeight: '400',
+    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    fontStyle: 'italic',
   },
-  appName: {
-    fontSize: 32,
+  apexTitle: {
+    fontSize: 36,
+    lineHeight: 42,
     fontWeight: '700',
-    letterSpacing: -0.5,
-    marginTop: 2,
+    color: colors.text,
+    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    letterSpacing: -1,
+    marginTop: 20,
+  },
+  goldBar: {
+    width: 36,
+    height: 3,
+    backgroundColor: colors.accent,
+    borderRadius: 2,
+    marginTop: 6,
   },
   profileButtonWrapper: {
     position: 'relative',
     width: 48,
     height: 48,
-    overflow: 'visible',
   },
   profileButton: {
     width: 48,
@@ -566,10 +633,10 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: 'center',
     alignItems: 'center',
-    borderWidth: 2,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
     overflow: 'hidden',
-    elevation: 0,
-    shadowOpacity: 0,
   },
   avatarImage: {
     width: 48,
@@ -591,7 +658,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#FFFFFF',
     zIndex: 10,
-    elevation: 10,
   },
   alertBadgeText: {
     color: '#FFFFFF',
@@ -600,17 +666,15 @@ const styles = StyleSheet.create({
   },
   bannerContainer: {
     marginHorizontal: 20,
-    borderRadius: 16,
+    borderRadius: 20,
     overflow: 'hidden',
-    height: 200,
+    height: 220,
     marginBottom: 32,
     position: 'relative',
-    borderWidth: 1,
   },
   bannerImage: {
     width: '100%',
     height: '100%',
-    opacity: 0.8,
   },
   bannerOverlay: {
     position: 'absolute',
@@ -618,110 +682,164 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    padding: 24,
-    justifyContent: 'center',
+    padding: 20,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    backgroundColor: 'rgba(10,40,30,0.45)',
   },
   bannerTitle: {
     color: '#FFFFFF',
-    fontSize: 28,
-    marginBottom: 8,
+    fontSize: 26,
+    fontWeight: '700',
+    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    marginBottom: 4,
   },
   bannerSubtitle: {
-    color: '#FFFFFF',
-    fontSize: 16,
+    color: 'rgba(255,255,255,0.85)',
+    fontSize: 14,
     marginBottom: 20,
-    opacity: 0.8,
   },
   bannerButton: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 12,
+    paddingHorizontal: 28,
+    paddingVertical: 14,
     alignSelf: 'flex-start',
   },
   bannerButtonText: {
+    color: '#FFFFFF',
     fontWeight: '600',
-    fontSize: 16,
+    fontSize: 15,
   },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
-    marginBottom: 20,
   },
   sectionTitle: {
-    fontSize: 22,
-    fontWeight: '600',
-    letterSpacing: -0.3,
+    fontSize: 20,
+    fontWeight: '700',
+    fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
+    color: colors.text,
+    marginBottom: 16,
+    marginTop: 28,
     flex: 1,
   },
   viewAllText: {
-    fontSize: 15,
-    fontWeight: '500',
+    fontSize: 13,
+    color: colors.primary,
+    fontWeight: '600',
+    marginBottom: 16,
+    marginTop: 28,
   },
   featuresContainer: {
     flexDirection: 'row',
     paddingHorizontal: 20,
-    marginBottom: 40,
-    gap: 16,
+    marginBottom: 12,
+    gap: 10,
   },
   featureCard: {
     flex: 1,
+    backgroundColor: colors.card,
+    borderRadius: 16,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: colors.cardBorder,
     alignItems: 'center',
-    justifyContent: 'flex-start',
   },
-  featureIcon: {
-    marginBottom: 12,
+  featureIconContainer: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: colors.background,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
   },
   featureTitle: {
-    fontSize: 15,
+    fontSize: 13,
     fontWeight: '600',
-    marginBottom: 6,
+    color: colors.text,
     textAlign: 'center',
-    letterSpacing: -0.2,
+    marginBottom: 4,
   },
   featureDescription: {
-    fontSize: 13,
+    fontSize: 11,
+    color: colors.textSecondary,
     textAlign: 'center',
-    lineHeight: 18,
-    opacity: 0.7,
+    lineHeight: 16,
   },
   featuredProductsContainer: {
-    marginBottom: 32,
+    marginBottom: 8,
   },
   featuredProductsContent: {
     paddingHorizontal: 20,
+    paddingBottom: 10,
   },
-  featuredProductCard: {
+  productCard: {
     width: width * 0.6,
     marginRight: 16,
     borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
+    borderColor: colors.cardBorder,
+    backgroundColor: colors.card,
+    shadowColor: colors.primary,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.07,
+    shadowRadius: 10,
+    elevation: 2,
   },
-  featuredProductImage: {
+  productImageContainer: {
     width: '100%',
-    height: 200,
+    height: 160,
+    backgroundColor: colors.background,
+    position: 'relative',
   },
-  featuredProductInfo: {
-    padding: 16,
+  productImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
   },
-  featuredProductTitle: {
-    fontSize: 16,
-    marginBottom: 8,
+  arBadge: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: colors.primary,
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  featuredProductPriceRow: {
+  arBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 1,
+  },
+  productInfo: {
+    padding: 12,
+  },
+  productTitle: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.text,
+    marginBottom: 4,
+  },
+  priceRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
   },
-  featuredProductPrice: {
-    fontSize: 18,
-    fontWeight: '600',
+  productPrice: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.primary,
   },
-  featuredProductOriginalPrice: {
-    fontSize: 14,
+  originalPrice: {
+    fontSize: 12,
     textDecorationLine: 'line-through',
+    color: colors.secondary,
   },
   featuredLoadingContainer: {
     paddingVertical: 40,
@@ -731,6 +849,7 @@ const styles = StyleSheet.create({
   featuredLoadingText: {
     marginTop: 12,
     fontSize: 13,
+    color: colors.textSecondary,
   },
   featuredEmptyContainer: {
     paddingVertical: 40,
@@ -741,11 +860,13 @@ const styles = StyleSheet.create({
     marginTop: 16,
     fontSize: 16,
     fontWeight: '600',
+    color: colors.textSecondary,
   },
   featuredEmptySubtext: {
     marginTop: 8,
     fontSize: 13,
     textAlign: 'center',
     paddingHorizontal: 40,
+    color: colors.secondary,
   },
 });

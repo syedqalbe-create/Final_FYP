@@ -519,12 +519,12 @@ const ProfileScreen = () => {
                 {accountFiltered.map((item, index) => (
                   <TouchableOpacity
                     key={`account-${index}`}
-                    style={[styles.menuItem, { backgroundColor: colors.surface }]}
+                    style={[styles.menuItem, { backgroundColor: '#FFFFFF' }]}
                     onPress={() => handleMenuPress(item.route)}
                   >
                     <View style={styles.menuItemLeft}>
-                      <View style={[styles.menuIconContainer, { backgroundColor: colors.background }]}>
-                        <Ionicons name={item.icon as any} size={20} color={colors.icon} />
+                      <View style={[styles.menuIconContainer, { backgroundColor: '#F4F9F7' }]}>
+                        <Ionicons name={item.icon as any} size={20} color="#0A6B4B" />
                       </View>
                       <View style={styles.menuItemText}>
                         <Text style={[styles.menuItemTitle, { color: colors.text }]}>{item.title}</Text>
@@ -540,17 +540,17 @@ const ProfileScreen = () => {
 
           {preferenceFiltered.length > 0 && (
             <View style={styles.section}>
-              <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>Preferences</Text>
+              <Text style={styles.sectionTitle}>Preferences</Text>
               <View style={styles.sectionItems}>
                 {preferenceFiltered.map((item, index) => (
                   <TouchableOpacity
                     key={`pref-${index}`}
-                    style={[styles.menuItem, { backgroundColor: colors.surface }]}
+                    style={[styles.menuItem, { backgroundColor: '#FFFFFF' }]}
                     onPress={() => handleMenuPress(item.route)}
                   >
                     <View style={styles.menuItemLeft}>
-                      <View style={[styles.menuIconContainer, { backgroundColor: colors.background }]}>
-                        <Ionicons name={item.icon as any} size={20} color={colors.icon} />
+                      <View style={[styles.menuIconContainer, { backgroundColor: '#F4F9F7' }]}>
+                        <Ionicons name={item.icon as any} size={20} color="#0A6B4B" />
                       </View>
                       <View style={styles.menuItemText}>
                         <Text style={[styles.menuItemTitle, { color: colors.text }]}>{item.title}</Text>
@@ -566,17 +566,17 @@ const ProfileScreen = () => {
 
           {helpFiltered.length > 0 && (
             <View style={styles.section}>
-              <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>Help & Support</Text>
+              <Text style={styles.sectionTitle}>Help & Support</Text>
               <View style={styles.sectionItems}>
                 {helpFiltered.map((item, index) => (
                   <TouchableOpacity
                     key={`help-${index}`}
-                    style={[styles.menuItem, { backgroundColor: colors.surface }]}
+                    style={[styles.menuItem, { backgroundColor: '#FFFFFF' }]}
                     onPress={() => handleMenuPress(item.route)}
                   >
                     <View style={styles.menuItemLeft}>
-                      <View style={[styles.menuIconContainer, { backgroundColor: colors.background }]}>
-                        <Ionicons name={item.icon as any} size={20} color={colors.icon} />
+                      <View style={[styles.menuIconContainer, { backgroundColor: '#F4F9F7' }]}>
+                        <Ionicons name={item.icon as any} size={20} color="#0A6B4B" />
                       </View>
                       <View style={styles.menuItemText}>
                         <Text style={[styles.menuItemTitle, { color: colors.text }]}>{item.title}</Text>
@@ -598,6 +598,7 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FAFCFB',
   },
   scrollView: {
     flex: 1,
@@ -624,6 +625,7 @@ const styles = StyleSheet.create({
     height: 96,
     borderRadius: 48,
     borderWidth: 2,
+    borderColor: '#C9A84C',
   },
   editBadge: {
     position: 'absolute',
@@ -643,6 +645,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 22,
     fontWeight: '600',
+    color: '#0D1F1A',
     marginBottom: 6,
     textAlign: 'center',
   },
@@ -662,15 +665,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
     padding: 16,
     borderRadius: 12,
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
-    elevation: 3,
+    borderWidth: 1,
+    borderColor: '#E0EDE8',
+    shadowColor: '#0A6B4B',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.05,
+    shadowRadius: 6,
+    elevation: 2,
   },
   statIcon: {
     marginBottom: 8,
@@ -693,10 +696,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 11,
     fontWeight: '700',
-    letterSpacing: 0.8,
+    letterSpacing: 1.5,
     textTransform: 'uppercase',
     marginBottom: 10,
     marginLeft: 4,
+    color: '#9DB8B0',
   },
   sectionItems: {
     gap: 10,
@@ -707,6 +711,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     padding: 16,
     borderRadius: 16,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E0EDE8',
   },
   menuItemLeft: {
     flexDirection: 'row',

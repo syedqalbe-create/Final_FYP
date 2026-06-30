@@ -51,6 +51,26 @@ allprojects {
  * ✅ FORCE JVM 17 FOR ALL MODULES (THIS FIXES YOUR ERROR)
  */
 subprojects {
+    // Force namespace for older libraries that do not declare it (required by AGP 8+)
+    plugins.withId("com.android.library") {
+        project.android {
+            if (namespace == null) {
+                try {
+                    def manifestFile = project.file("src/main/AndroidManifest.xml")
+                    if (manifestFile.exists()) {
+                        def parsedManifest = new XmlParser().parse(manifestFile)
+                        def packageName = parsedManifest.'@package'
+                        if (packageName) {
+                            namespace = packageName
+                        }
+                    }
+                } catch (Exception e) {
+                    // ignore
+                }
+            }
+        }
+    }
+
     // Some dependencies in node_modules declare their own (older) AGP/Kotlin plugin versions.
     // Force them onto our supported versions.
     buildscript {

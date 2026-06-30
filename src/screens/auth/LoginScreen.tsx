@@ -190,7 +190,7 @@ const LoginScreen = () => {
           </View>
 
           <Text style={[styles.welcomeText, { color: colors.text }, isSmallScreen && styles.welcomeTextSmall]}>
-            Shop360°
+            Vision AR
           </Text>
           <Text
             style={[

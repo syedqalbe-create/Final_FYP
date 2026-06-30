@@ -4,11 +4,15 @@
   "private": true,
   "scripts": {
     "postinstall": "node scripts/patch-react-native-screens.js",
-    "android": "react-native run-android",
+    "android": "node scripts/run-android.js",
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "adb:devices": "node scripts/adb-connect.js --devices",
+    "adb:connect": "node scripts/adb-connect.js",
+    "adb:reverse": "node scripts/adb-connect.js --reverse",
+    "android:wireless": "node scripts/adb-connect.js"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
@@ -22,6 +26,7 @@
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
     "@viro-community/react-viro": "^2.41.1",
+    "firebase": "^12.15.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-native": "0.72.5",
@@ -32,7 +37,6 @@
     "react-native-vector-icons": "^10.3.0"
   },
   "devDependencies": {
-    "firebase-tools": "^12.0.0",
     "@babel/core": "^7.12.9",
     "@babel/runtime": "^7.12.5",
     "@react-native-community/eslint-config": "^2.0.0",
@@ -47,6 +51,7 @@
     "@typescript-eslint/parser": "^5.37.0",
     "babel-jest": "^26.6.3",
     "eslint": "^7.32.0",
+    "firebase-tools": "^12.0.0",
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "0.72.3",
     "react-test-renderer": "18.1.0",
@@ -55,7 +60,9 @@
   },
   "jest": {
     "preset": "react-native",
-    "setupFilesAfterEnv": ["<rootDir>/jest.setup.js"],
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
+    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",

@@ -1,94 +1,33 @@
 {
   "project_info": {
-    "project_number": "294453693408",
-    "project_id": "shop360-7bfcd",
-    "storage_bucket": "shop360-7bfcd.firebasestorage.app"
+    "project_number": "232894614284",
+    "project_id": "vision-ar-747c0",
+    "storage_bucket": "vision-ar-747c0.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:294453693408:android:20c387886b0b103d71f985",
+        "mobilesdk_app_id": "1:232894614284:android:147e8faf171a2f50209729",
         "android_client_info": {
-          "package_name": "com.fyp.shop360"
+          "package_name": "com.fyp.visionAR"
         }
       },
       "oauth_client": [
         {
-          "client_id": "294453693408-78j2abg9qjpi7pm7rksrop4ij7iup5ap.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fyp.shop360",
-            "certificate_hash": "db4a5daab90f42f9751ec5a689c27f60ba675aaf"
-          }
-        },
-        {
-          "client_id": "294453693408-fv2ngbos25q9v544ohtbds4a6t7foele.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.fyp.shop360",
-            "certificate_hash": "6a3645388242d1043f06f9fd7c5a0dfac50a56b4"
-          }
-        },
-        {
-          "client_id": "294453693408-5j2vttrgnm7tk5dhe8ai9j74uco85b4l.apps.googleusercontent.com",
+          "client_id": "232894614284-pqdpaadpqp8b7hhh60eje0f34j6jb1ma.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDqr9YDs7UcDx6rjbgjH-qceF6EXDFBVBU"
+          "current_key": "AIzaSyBwrRZqvVOYRmBtwSXR6FcqwnpGqiAiz9U"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "294453693408-5j2vttrgnm7tk5dhe8ai9j74uco85b4l.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:294453693408:android:2b9a5faa06eb4ea971f985",
-        "android_client_info": {
-          "package_name": "com.shop360"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "294453693408-1rgkin7a0cb8r1jndf7njvjflcue3r3u.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.shop360",
-            "certificate_hash": "6a3645388242d1043f06f9fd7c5a0dfac50a56b4"
-          }
-        },
-        {
-          "client_id": "294453693408-d2gs1i51m5c5i8nj5nf475hrrccprbmt.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.shop360",
-            "certificate_hash": "db4a5daab90f42f9751ec5a689c27f60ba675aaf"
-          }
-        },
-        {
-          "client_id": "294453693408-5j2vttrgnm7tk5dhe8ai9j74uco85b4l.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDqr9YDs7UcDx6rjbgjH-qceF6EXDFBVBU"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "294453693408-5j2vttrgnm7tk5dhe8ai9j74uco85b4l.apps.googleusercontent.com",
+              "client_id": "232894614284-pqdpaadpqp8b7hhh60eje0f34j6jb1ma.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

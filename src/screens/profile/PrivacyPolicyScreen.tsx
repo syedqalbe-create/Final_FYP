@@ -31,7 +31,7 @@ const PrivacyPolicyScreen = () => {
         </Text>
 
         <Text style={[styles.intro, { color: colors.textSecondary }]}>
-          Your privacy matters to us. This policy explains how we collect, use, and protect your information when you use Shop360.
+          Your privacy matters to us. This policy explains how we collect, use, and protect your information when you use Vision AR.
         </Text>
 
         <View style={styles.section}>
@@ -129,7 +129,7 @@ const PrivacyPolicyScreen = () => {
           <Text style={[styles.sectionNumber, { color: colors.textSecondary }]}>06</Text>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Children's Privacy</Text>
           <Text style={[styles.sectionText, { color: colors.textSecondary }]}>
-            Shop360 is not intended for children under 13. We don't knowingly collect their data.
+            Vision AR is not intended for children under 13. We don't knowingly collect their data.
           </Text>
         </View>
 

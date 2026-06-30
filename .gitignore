@@ -72,3 +72,8 @@ src/ar/models/*.rar
 
 # Test Case Specs (now in tests/ folder and tracked in git)
 # Test files have been moved to tests/ folder and are now tracked
+
+# Environmental variables / API Keys
+.env
+android/app/google-services.json
+android/app/google-services copy.json

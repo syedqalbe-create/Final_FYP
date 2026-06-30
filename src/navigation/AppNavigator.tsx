@@ -61,24 +61,21 @@ const Tab = createBottomTabNavigator();
 const AdminTab = createBottomTabNavigator();
 
 const CustomTabBar = ({ state, descriptors: _descriptors, navigation }: BottomTabBarProps) => {
-  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
-
-  const circleRadius = 20;
 
   return (
     <View
       style={{
         flexDirection: 'row',
-        backgroundColor: colors.background,
+        backgroundColor: '#FFFFFF',
         height: 70 + (Platform.OS === 'ios' ? insets.bottom : 0),
-        paddingBottom: Platform.OS === 'ios' ? insets.bottom : 8,
-        borderTopWidth: 0.5,
-        borderTopColor: colors.border,
+        paddingBottom: Platform.OS === 'ios' ? insets.bottom : 0,
+        paddingVertical: 10,
+        borderTopWidth: 1,
+        borderTopColor: '#E0EDE8',
         position: 'relative',
       }}
     >
-      {/* Tab buttons */}
       {state.routes.map((route, index) => {
         const isFocused = state.index === index;
 
@@ -140,6 +137,9 @@ const CustomTabBar = ({ state, descriptors: _descriptors, navigation }: BottomTa
           }
         };
 
+        const activeColor = '#0A6B4B';
+        const inactiveColor = '#9DB8B0';
+
         return (
           <TouchableOpacity
             key={route.key}
@@ -151,50 +151,33 @@ const CustomTabBar = ({ state, descriptors: _descriptors, navigation }: BottomTa
               position: 'relative',
             }}
           >
-            {/* Floating circle for active tab */}
-            {isFocused && (
-              <View
-                style={{
-                  position: 'absolute',
-                  top: -12,
-                  width: circleRadius * 2,
-                  height: circleRadius * 2,
-                  borderRadius: circleRadius,
-                  backgroundColor: colors.primary,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  shadowColor: '#000',
-                  shadowOffset: {
-                    width: 0,
-                    height: 2,
-                  },
-                  shadowOpacity: 0.15,
-                  shadowRadius: 4,
-                  elevation: 4,
-                }}
-              >
-                <Ionicons name={getIconName() as any} size={20} color={colors.background} />
-              </View>
-            )}
-
-            {/* Regular icon for inactive tabs */}
-            {!isFocused && (
+            <View style={{ alignItems: 'center', justifyContent: 'center', height: 26 }}>
               <Ionicons
                 name={getIconName() as any}
                 size={22}
-                color={colors.textSecondary}
-                style={{ marginBottom: 4 }}
+                color={isFocused ? activeColor : inactiveColor}
               />
-            )}
+              {isFocused && (
+                <View
+                  style={{
+                    position: 'absolute',
+                    bottom: -6,
+                    width: 20,
+                    height: 2,
+                    backgroundColor: '#C9A84C', // Gold underline indicator
+                    borderRadius: 1,
+                  }}
+                />
+              )}
+            </View>
 
-            {/* Label */}
             <Text
               style={{
-                fontSize: 11,
-                fontWeight: isFocused ? '600' : '500',
-                color: isFocused ? colors.primary : colors.textSecondary,
-                marginTop: isFocused ? 16 : 4,
-                opacity: isFocused ? 1 : 0.8,
+                fontSize: 10,
+                letterSpacing: 0.5,
+                fontWeight: '500',
+                color: isFocused ? activeColor : inactiveColor,
+                marginTop: 8,
               }}
             >
               {getTitle()}

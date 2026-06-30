@@ -71,7 +71,7 @@ const SettingsScreen = () => {
           {
             title: 'Location Permission',
             message:
-              'Shop360 needs access to your location to help you add delivery addresses quickly and accurately. You can choose to allow access only while using the app or all the time.',
+              'Vision AR needs access to your location to help you add delivery addresses quickly and accurately. You can choose to allow access only while using the app or all the time.',
             buttonNeutral: 'Ask Me Later',
             buttonNegative: 'Deny',
             buttonPositive: 'Allow',
@@ -83,7 +83,7 @@ const SettingsScreen = () => {
         } else if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
           alert(
             'Permission Blocked',
-            'Location permission has been blocked. Please enable it in Settings > Apps > Shop360 > Permissions > Location.',
+            'Location permission has been blocked. Please enable it in Settings > Apps > Vision AR > Permissions > Location.',
             [
               { text: 'Cancel', style: 'cancel' },
               {

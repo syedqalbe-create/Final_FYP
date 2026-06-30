@@ -8,11 +8,11 @@ project.ext.react = [
 ]
 
 android {
-    namespace "com.fyp.shop360"
+    namespace "com.fyp.visionAR"
     compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.fyp.shop360"
+        applicationId "com.fyp.visionAR"
         minSdk rootProject.ext.minSdkVersion
         targetSdk rootProject.ext.targetSdkVersion
         versionCode 8

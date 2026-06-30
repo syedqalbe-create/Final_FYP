@@ -107,7 +107,7 @@ const AddressFormScreen = () => {
             {
               title: 'Location Permission',
               message:
-                'Shop360 needs your location to help you add delivery addresses quickly and accurately. You can choose to allow access only while using the app or all the time.',
+                'Vision AR needs your location to help you add delivery addresses quickly and accurately. You can choose to allow access only while using the app or all the time.',
               buttonNeutral: 'Ask Me Later',
               buttonNegative: 'Deny',
               buttonPositive: 'Allow',
@@ -120,7 +120,7 @@ const AddressFormScreen = () => {
           } else if (granted === PermissionsAndroid.RESULTS.NEVER_ASK_AGAIN) {
             alert(
               'Permission Required',
-              'Location permission has been blocked. Please enable it in Settings > Apps > Shop360 > Permissions > Location.',
+              'Location permission has been blocked. Please enable it in Settings > Apps > Vision AR > Permissions > Location.',
               [
                 { text: 'Cancel', style: 'cancel' },
                 {
@@ -154,7 +154,7 @@ const AddressFormScreen = () => {
         if (!granted) {
           alert(
             'Location Access',
-            'To use this feature, please enable location access in Settings > Privacy > Location Services > Shop360',
+            'To use this feature, please enable location access in Settings > Privacy > Location Services > Vision AR',
             [
               { text: 'Cancel', style: 'cancel' },
               { text: 'Open Settings', onPress: () => Linking.openSettings() },
@@ -177,7 +177,7 @@ const AddressFormScreen = () => {
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1&accept-language=en`,
         {
           headers: {
-            'User-Agent': 'Shop360-Mobile-App',
+            'User-Agent': 'Vision-AR-Mobile-App',
           },
         },
       );

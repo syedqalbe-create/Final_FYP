@@ -272,52 +272,84 @@ const ProductListScreen = () => {
     }
   };
 
+  // Helper to get premium product images
+  const getProductImageUri = (product: Product) => {
+    const title = product.title.toLowerCase();
+    if (title.includes('headphone')) {
+      return 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400';
+    }
+    if (title.includes('watch') || title.includes('smartwatch')) {
+      return 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400';
+    }
+    if (title.includes('laptop') || title.includes('computer')) {
+      return 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400';
+    }
+    if (title.includes('sneaker') || title.includes('shoe')) {
+      return 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400';
+    }
+    return product.thumbnail || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400';
+  };
+
   const renderProductCard = ({ item }: { item: Product }) => {
     const discountedPrice =
       item.discountPercentage > 0 ? item.price * (1 - item.discountPercentage / 100) : item.price;
     const isOutOfStock = (item.stock ?? 0) <= 0;
 
-    return (
-      <TouchableOpacity
-        style={[styles.productCard, { backgroundColor: colors.surface, borderColor: colors.border }]}
-        onPress={() => navigation.navigate('ProductDetails', { id: item.id })}
-        activeOpacity={0.7}
-      >
-        <View style={styles.imageContainer}>
-          <Image source={{ uri: item.thumbnail || '' }} style={styles.productImage} />
-          {/* Discount Badge */}
-          {item.discountPercentage > 0 && (
-            <View style={styles.discountBadge}>
-              <Text style={styles.discountText}>-{Math.round(item.discountPercentage)}%</Text>
-            </View>
-          )}
-          {/* Stock indicator */}
-          {isOutOfStock && (
-            <View style={styles.outOfStockOverlay}>
-              <Text style={styles.outOfStockText}>Out of Stock</Text>
-            </View>
-          )}
-        </View>
+    // Press scale animation
+    const scale = new Animated.Value(1);
+    const handlePressIn = () => {
+      Animated.spring(scale, { toValue: 0.97, useNativeDriver: true }).start();
+    };
+    const handlePressOut = () => {
+      Animated.spring(scale, { toValue: 1, useNativeDriver: true }).start();
+    };
 
-        <View style={styles.productInfo}>
-          <Text style={[styles.productBrand, { color: colors.textSecondary }]} numberOfLines={1}>
-            {item.brand || 'Brand'}
-          </Text>
-          <Text style={[styles.productTitle, { color: colors.text }]} numberOfLines={2}>
-            {item.title}
-          </Text>
-          <View style={styles.priceRow}>
-            <Text style={[styles.productPrice, { color: colors.text }]}>
-              ${discountedPrice.toFixed(2)}
-            </Text>
+    return (
+      <Animated.View style={{ transform: [{ scale }] }}>
+        <TouchableOpacity
+          style={styles.productCard}
+          onPress={() => navigation.navigate('ProductDetails', { id: item.id })}
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
+          activeOpacity={1}
+        >
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: getProductImageUri(item) }} style={styles.productImage} />
+            {/* AR Badge */}
+            <View style={styles.arBadge}>
+              <Text style={styles.arBadgeText}>AR</Text>
+            </View>
+            {/* Discount Badge */}
             {item.discountPercentage > 0 && (
-              <Text style={[styles.originalPrice, { color: colors.textSecondary }]}>
-                ${item.price.toFixed(2)}
-              </Text>
+              <View style={styles.discountBadge}>
+                <Text style={styles.discountText}>-{Math.round(item.discountPercentage)}%</Text>
+              </View>
+            )}
+            {/* Stock indicator */}
+            {isOutOfStock && (
+              <View style={styles.outOfStockOverlay}>
+                <Text style={styles.outOfStockText}>Out of Stock</Text>
+              </View>
             )}
           </View>
-        </View>
-      </TouchableOpacity>
+
+          <View style={styles.productInfo}>
+            <Text style={styles.productTitle} numberOfLines={2}>
+              {item.title}
+            </Text>
+            <View style={styles.priceRow}>
+              <Text style={styles.productPrice}>
+                ${discountedPrice.toFixed(2)}
+              </Text>
+              {item.discountPercentage > 0 && (
+                <Text style={styles.originalPrice}>
+                  ${item.price.toFixed(2)}
+                </Text>
+              )}
+            </View>
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
     );
   };
 
@@ -757,24 +789,27 @@ const ProductListScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FAFCFB',
   },
   topControls: {
     paddingHorizontal: 20,
     paddingBottom: 16,
     zIndex: 100,
-    elevation: 5,
   },
   searchBar: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 14,
+    backgroundColor: '#F4F9F7',
+    borderColor: '#E0EDE8',
     borderWidth: 1,
+    borderRadius: 12,
     paddingHorizontal: 16,
     paddingVertical: 12,
     marginBottom: 16,
   },
   searchIcon: {
     marginRight: 10,
+    color: '#0A6B4B',
   },
   searchInput: {
     flex: 1,
@@ -793,7 +828,6 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'relative',
     zIndex: 1001,
-    elevation: 10,
   },
   sortButton: {
     flex: 1,
@@ -922,32 +956,59 @@ const styles = StyleSheet.create({
   },
   productRow: {
     justifyContent: 'space-between',
-    marginBottom: 20,
+    marginBottom: 12, // Gap: 12 between rows
   },
   productCard: {
-    width: CARD_WIDTH,
-    borderRadius: 18,
+    width: (width - 52) / 2, // 2 columns with gap 12
+    borderRadius: 16,
     overflow: 'hidden',
     borderWidth: 1,
+    borderColor: '#E0EDE8',
+    backgroundColor: '#FFFFFF',
+    shadowColor: '#0A6B4B',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.07,
+    shadowRadius: 10,
+    elevation: 2,
   },
   imageContainer: {
     width: '100%',
-    aspectRatio: 1,
+    height: 160,
     position: 'relative',
-    backgroundColor: '#F8F8F8',
+    backgroundColor: '#F4F9F7',
   },
   productImage: {
     width: '100%',
     height: '100%',
+    resizeMode: 'cover',
+  },
+  arBadge: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: '#0A6B4B',
+    paddingHorizontal: 8,
+    paddingVertical: 3,
+    borderRadius: 50,
+    alignItems: 'center',
+    justifyContent: 'center',
+    zIndex: 2,
+  },
+  arBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 1,
   },
   discountBadge: {
     position: 'absolute',
     top: 10,
-    right: 10,
+    left: 10,
     backgroundColor: '#FF3B30',
-    paddingHorizontal: 10,
-    paddingVertical: 5,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
     borderRadius: 12,
+    zIndex: 2,
   },
   discountText: {
     color: '#FFF',
@@ -963,6 +1024,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
     justifyContent: 'center',
     alignItems: 'center',
+    zIndex: 3,
   },
   outOfStockText: {
     color: '#FFF',
@@ -970,19 +1032,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   productInfo: {
-    padding: 14,
-  },
-  productBrand: {
-    fontSize: 12,
-    fontWeight: '500',
-    marginBottom: 4,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    padding: 12,
   },
   productTitle: {
-    fontSize: 15,
+    fontSize: 14,
     fontWeight: '600',
-    marginBottom: 8,
+    color: '#0D1F1A',
+    marginBottom: 4,
     minHeight: 40,
     lineHeight: 20,
   },
@@ -992,13 +1048,14 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   productPrice: {
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '700',
+    color: '#0A6B4B',
   },
   originalPrice: {
-    fontSize: 13,
+    fontSize: 12,
     textDecorationLine: 'line-through',
-    opacity: 0.6,
+    color: '#9DB8B0',
   },
   footer: {
     paddingVertical: 20,

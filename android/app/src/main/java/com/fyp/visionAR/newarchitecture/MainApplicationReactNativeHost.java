@@ -1,4 +1,4 @@
-package com.fyp.shop360.newarchitecture;
+package com.fyp.visionAR.newarchitecture;
 
 import android.app.Application;
 import androidx.annotation.NonNull;
@@ -19,9 +19,9 @@ import com.facebook.react.fabric.CoreComponentsRegistry;
 import com.facebook.react.fabric.FabricJSIModuleProvider;
 import com.facebook.react.fabric.ReactNativeConfig;
 import com.facebook.react.uimanager.ViewManagerRegistry;
-import com.fyp.shop360.BuildConfig;
-import com.fyp.shop360.newarchitecture.components.MainComponentsRegistry;
-import com.fyp.shop360.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
+import com.fyp.visionAR.BuildConfig;
+import com.fyp.visionAR.newarchitecture.components.MainComponentsRegistry;
+import com.fyp.visionAR.newarchitecture.modules.MainApplicationTurboModuleManagerDelegate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,8 +77,6 @@ public class MainApplicationReactNativeHost extends ReactNativeHost {
           final JavaScriptContextHolder jsContext) {
         final List<JSIModuleSpec> specs = new ArrayList<>();
 
-        // Here we provide a new JSIModuleSpec that will be responsible of providing the
-        // custom Fabric Components.
         specs.add(
             new JSIModuleSpec() {
               @Override
@@ -91,9 +89,6 @@ public class MainApplicationReactNativeHost extends ReactNativeHost {
                 final ComponentFactory componentFactory = new ComponentFactory();
                 CoreComponentsRegistry.register(componentFactory);
 
-                // Here we register a Components Registry.
-                // The one that is generated with the template contains no components
-                // and just provides you the one from React Native core.
                 MainComponentsRegistry.register(componentFactory);
 
                 final ReactInstanceManager reactInstanceManager = getReactInstanceManager();
