@@ -1,12 +1,12 @@
-# Shop360°
+# VisionAR
 
-Shop360° is a mobile shopping app that provides **Augmented Reality (AR)** to make online shopping better. The application allows customers to view and interact with 3D product models in their real-time environment using the phone's camera, so they can see how a product would look in their space before buying it—for example, placing furniture in their rooms with **Markerless AR**.
+VisionAR is a mobile shopping app that provides **Augmented Reality (AR)** to make online shopping better. The application allows customers to view and interact with 3D product models in their real-time environment using the phone's camera, so they can see how a product would look in their space before buying it—for example, placing furniture in their rooms with **Markerless AR**.
 
 The app is built with **React Native** for cross-platform use; Expo Go was used in the design and testing phase. AR features are implemented with **ViroReact**, enabling Markerless AR experiences on Android devices that support ARCore. Product images and 3D models are stored in **Firebase Storage**; user data, products, reviews, chats, and wishlists are stored in **Firestore**.
 
 **Firebase Authentication** handles secure login, sign-up, and **role-based access** via Custom Claims. Normal users and admins use the same app with different access and features: admins can add or modify products, handle reviews, and manage the app; vendors can upload or edit products; users can browse, add to wishlist, write reviews, and preview products in AR. Secure admin/vendor actions (product management, payment processing) are done through a Firebase backend and secure APIs. The app also includes simple **chat** for user–admin communication.
 
-Shop360° aims to reduce the need for large physical showrooms by helping businesses showcase products online—a cost-effective, modern approach especially for businesses in Pakistan, connecting them with a wider audience and delivering an experiential, immersive shopping experience. *"See It. Try It. Buy It."*
+VisionAR aims to reduce the need for large physical showrooms by helping businesses showcase products online—a cost-effective, modern approach especially for businesses in Pakistan, connecting them with a wider audience and delivering an experiential, immersive shopping experience. *"See It. Try It. Buy It."*
 
 ---
 
@@ -62,7 +62,7 @@ Optional: **Android device or emulator** to run the app.
 
 ```bash
 git clone <repository-url>
-cd Shop360
+
 ```
 
 **2. Install dependencies**
