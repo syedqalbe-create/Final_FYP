@@ -1,4 +1,4 @@
-/* Shop360° Privacy Policy — minimal theme-aligned styles */
+/* VisionAR Privacy Policy — minimal theme-aligned styles */
 :root {
   --bg: #FFFFFF;
   --surface: #F5F5F5;
@@ -180,6 +180,7 @@ h1 {
   .wrap {
     padding: 1.5rem 1rem 2.5rem;
   }
+
   h1 {
     font-size: 1.65rem;
   }
