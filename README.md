@@ -62,7 +62,7 @@ Optional: **Android device or emulator** to run the app.
 
 ```bash
 git clone <repository-url>
-cd Shop360
+
 ```
 
 **2. Install dependencies**
