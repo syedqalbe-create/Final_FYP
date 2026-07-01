@@ -614,6 +614,9 @@ const getStyles = (colors: any) => StyleSheet.create({
     fontFamily: Platform.OS === 'ios' ? 'Georgia' : 'serif',
     letterSpacing: -1,
     marginTop: 20,
+    textShadowColor: colors.glow,
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 6,
   },
   goldBar: {
     width: 36,
@@ -621,6 +624,11 @@ const getStyles = (colors: any) => StyleSheet.create({
     backgroundColor: colors.accent,
     borderRadius: 2,
     marginTop: 6,
+    shadowColor: colors.glow,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 10,
+    elevation: 4,
   },
   profileButtonWrapper: {
     position: 'relative',

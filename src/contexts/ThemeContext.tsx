@@ -6,37 +6,39 @@ import { getTheme, storeTheme } from '../utils/storage';
 export type ThemeType = 'light' | 'dark';
 
 export const lightTheme = {
-  background: '#FAFCFB',
+  background: '#F0FDFC', // Clean daylight teal-white
   surface: '#FFFFFF',
-  primary: '#0A6B4B',
-  secondary: '#9DB8B0',
-  accent: '#C9A84C',
-  border: '#E0EDE8',
-  text: '#0D1F1A',
-  textSecondary: '#4B6B61',
-  tabBar: '#FAFCFB',
-  tabBarBorder: '#E0EDE8',
+  primary: '#00897B', // Corporate teal
+  secondary: '#00695C',
+  accent: '#00BCD4',
+  glow: '#1DE9B6', // Neon teal glow (light mode)
+  border: '#B2DFDB',
+  text: '#002020',
+  textSecondary: '#00695C',
+  tabBar: '#F0FDFC',
+  tabBarBorder: '#B2DFDB',
   card: '#FFFFFF',
-  cardBorder: '#E0EDE8',
-  icon: '#0A6B4B',
-  iconInactive: '#9DB8B0',
+  cardBorder: '#B2DFDB',
+  icon: '#00897B',
+  iconInactive: '#80CBC4',
 };
 
 export const darkTheme = {
-  background: '#121212',
-  surface: '#1E1E1E',
-  primary: '#249C76', // Lighter green for dark mode contrast
-  secondary: '#5C7A70',
-  accent: '#D4B86A',
-  border: '#2C3632',
-  text: '#F5F5F5',
-  textSecondary: '#A0AAB2',
-  tabBar: '#1A1A1A',
-  tabBarBorder: '#2C3632',
-  card: '#1E1E1E',
-  cardBorder: '#2C3632',
-  icon: '#249C76',
-  iconInactive: '#5C7A70',
+  background: '#050D0E', // Deep black-teal void
+  surface: '#0A1A1C',   // HUD panel surface
+  primary: '#00E5C8',   // Neon teal — main HUD color
+  secondary: '#00A896', // Subdued teal secondary
+  accent: '#1DE9B6',
+  glow: '#39FF14',      // Neon green — active AR indicators
+  border: '#0F2D2F',
+  text: '#E0FFF8',      // Cold white-green text
+  textSecondary: '#5E9E94',
+  tabBar: '#050D0E',
+  tabBarBorder: '#0F2D2F',
+  card: '#0A1A1C',
+  cardBorder: '#0F2D2F',
+  icon: '#00E5C8',
+  iconInactive: '#2E5F5A',
 };
 
 // Create theme context

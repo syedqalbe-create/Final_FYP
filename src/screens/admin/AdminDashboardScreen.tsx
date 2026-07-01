@@ -16,7 +16,7 @@ import {
 } from '../../services/admin/adminService';
 
 export default function AdminDashboardScreen() {
-  const { colors } = useTheme();
+  const { colors, isDark, toggleTheme } = useTheme();
   const { isAdmin } = useAuth();
   const navigation = useNavigation<any>();
   const [loading, setLoading] = useState(true);
@@ -160,13 +160,19 @@ export default function AdminDashboardScreen() {
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.headerRow}>
           <View style={{ flex: 1 }}>
-            <Text style={[styles.title, { color: colors.text }]}>Admin Dashboard</Text>
+            <Text style={[styles.title, { color: colors.text, textShadowColor: colors.glow, textShadowRadius: isDark ? 8 : 0 }]}>Admin Dashboard</Text>
             <Text style={[styles.body, { color: colors.textSecondary, marginTop: -6 }]}>
               Manage the store and users
             </Text>
           </View>
           <TouchableOpacity
-            style={[styles.openShopBtn, { backgroundColor: colors.primary }]}
+            style={[styles.themeToggleBtn, { borderColor: colors.border }]}
+            onPress={toggleTheme}
+          >
+            <Ionicons name={isDark ? "moon" : "sunny"} size={18} color={isDark ? colors.secondary : colors.primary} />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.openShopBtn, { backgroundColor: colors.primary, shadowColor: colors.glow, shadowRadius: 10, shadowOpacity: 0.5 }]}
             onPress={() => navigation.navigate('MainTabs')}
           >
             <Ionicons name="storefront-outline" size={18} color={colors.background} />
@@ -363,6 +369,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderRadius: 14,
+  },
+  themeToggleBtn: {
+    padding: 10,
+    borderRadius: 14,
+    borderWidth: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   openShopText: { fontSize: 13, fontWeight: '800' },
   center: { alignItems: 'center', justifyContent: 'center', paddingVertical: 40 },
